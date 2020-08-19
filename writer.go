@@ -25,10 +25,10 @@ type Writer struct {
 
 // NewWriter creates a new WaveWriter and writes the header to it
 func (file File) NewWriter(out output) (wr *Writer, err error) {
-	if file.Channels != 1 {
-		err = fmt.Errorf("sorry, only mono currently")
-		return
-	}
+	//if file.Channels != 1 {
+	//	err = fmt.Errorf("sorry, only mono currently")
+	//	return
+	//}
 
 	wr = &Writer{}
 	wr.output = out
@@ -77,6 +77,18 @@ func (file File) NewWriter(out output) (wr *Writer, err error) {
 	}
 
 	return
+}
+
+// WriteInt16 writes the sample to the file using the binary package
+func (w *Writer) WriteInt16(sample int16) error {
+	err := binary.Write(w.sampleBuf, binary.LittleEndian, sample)
+	if err != nil {
+		return err
+	}
+
+	w.bytesWritten += 2
+
+	return err
 }
 
 // WriteInt32 writes the sample to the file using the binary package
